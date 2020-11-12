@@ -115,6 +115,8 @@ class Rak811Serial(object):
                             line = '?'
                         if match(r'^(OK|ERROR|at+)', line):
                             self._read_buffer.append(line)
+                        elif len(self._read_buffer) > 0 and self._read_buffer[-1] == 'OK':
+                            self._read_buffer.append(line)
                         sleep(0.1)
                         if self._serial.in_waiting > 0:
                             line = self._serial.readline()
@@ -141,6 +143,9 @@ class Rak811Serial(object):
                     )
             response = self._read_buffer.pop(0)
         return response
+
+    def buffer_empty(self):
+        return len(self._read_buffer) < 1
 
     def get_events(self, timeout=None):
         """Get events from module.

@@ -228,7 +228,9 @@ class Rak811(object):
             response = self._serial.get_response()
 
         if response.startswith(RESPONSE_OK):
-            response = response[len(RESPONSE_OK):]
+            response = response[len(RESPONSE_OK):].strip()
+            if len(response) < 1 and not self._serial.buffer_empty():
+                response = self._serial.get_response()
         elif response.startswith(RESPONSE_ERROR):
             raise Rak811ResponseError(response[len(RESPONSE_ERROR):])
         else:
