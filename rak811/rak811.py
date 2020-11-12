@@ -361,7 +361,10 @@ class Rak811(object):
 
         Region is one of: EU868, US915, AU915, KR920, AS923, IN865.
         """
-        return(self._send_command('band'))
+        response = self._send_command('band')
+        if response[0] == '.':
+            response = response[1:]
+        return response
 
     @band.setter
     def band(self, region):
